@@ -1,0 +1,121 @@
+---
+import '../styles/global.css';
+
+interface Props {
+  lang: 'pt-BR' | 'en';
+  title: string;
+  description: string;
+  altHref: string;
+}
+
+const { lang, title, description, altHref } = Astro.props;
+const isPt = lang === 'pt-BR';
+---
+
+<!doctype html>
+<html lang={lang} data-theme="dark">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <meta name="color-scheme" content="light dark" />
+    <link rel="canonical" href={new URL(Astro.url.pathname, Astro.site)} />
+    <link rel="alternate" hreflang={isPt ? 'en' : 'pt-BR'} href={new URL(altHref, Astro.site)} />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Fraunces:opsz,wght@9..144,500;9..144,600&family=Inter:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <script is:inline>
+      // Runs before first paint so the chosen theme does not flash.
+      (function () {
+        try {
+          var stored = localStorage.getItem('stampyx-theme');
+          var dark = stored
+            ? stored === 'dark'
+            : window.matchMedia('(prefers-color-scheme: dark)').matches;
+          document.documentElement.setAttribute('data-theme', dark ? 'dark' : 'light');
+        } catch (e) {
+          /* private mode: keep the markup default */
+        }
+      })();
+    </script>
+  </head>
+
+  <body>
+    <div class="wrap">
+      <nav>
+        <a class="brand" href={isPt ? '/' : '/en/'} style="text-decoration:none;color:inherit">
+          <span class="brand-mark" aria-hidden="true">STX</span>
+          <span>stampyx</span>
+        </a>
+
+        <div class="nav-right">
+          <a class="nav-link" href="#how">{isPt ? 'Como funciona' : 'How it works'}</a>
+
+          <div class="lang-pill">
+            <a href="/" aria-current={isPt ? 'true' : 'false'} hreflang="pt-BR">PT</a>
+            <a href="/en/" aria-current={isPt ? 'false' : 'true'} hreflang="en">EN</a>
+          </div>
+
+          <button
+            class="icon-btn"
+            id="theme-toggle"
+            type="button"
+            aria-label={isPt ? 'Alternar tema' : 'Toggle theme'}
+          >
+            <span aria-hidden="true">☾</span>
+          </button>
+
+          <a class="btn-cta" href="/ui/">{isPt ? 'Entrar' : 'Sign in'}</a>
+        </div>
+      </nav>
+
+      <slot />
+
+      <footer>
+        <div class="foot-text">
+          {
+            isPt
+              ? 'stampyx — infraestrutura de email própria, feita e operada por você.'
+              : 'stampyx — self-hosted email infrastructure, built and run by you.'
+          }
+        </div>
+        <div class="foot-links">
+          <a href="#how">{isPt ? 'Arquitetura' : 'Architecture'}</a>
+          <a href="/ui/">{isPt ? 'Painel' : 'Panel'}</a>
+        </div>
+      </footer>
+    </div>
+
+    <script is:inline>
+      (function () {
+        var root = document.documentElement;
+        var btn = document.getElementById('theme-toggle');
+        if (!btn) return;
+
+        function paint() {
+          btn.firstElementChild.textContent =
+            root.getAttribute('data-theme') === 'dark' ? '☾' : '☀';
+        }
+
+        paint();
+
+        btn.addEventListener('click', function () {
+          var next = root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+          root.setAttribute('data-theme', next);
+          paint();
+          try {
+            localStorage.setItem('stampyx-theme', next);
+          } catch (e) {
+            /* nothing to persist to */
+          }
+        });
+      })();
+    </script>
+  </body>
+</html>

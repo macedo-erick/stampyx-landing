@@ -1,0 +1,25 @@
+{
+  "name": "stampyx-landing",
+  "version": "0.0.0",
+  "description": "Public site for Stampyx: self-hosted email infrastructure.",
+  "private": true,
+  "type": "module",
+  "packageManager": "yarn@1.22.22",
+  "scripts": {
+    "dev": "astro dev --port 4203",
+    "build": "astro build",
+    "preview": "astro preview",
+    "format": "prettier \"src/**/*.{astro,ts,css}\" --write",
+    "format:check": "prettier \"src/**/*.{astro,ts,css}\" --check",
+    "typecheck": "astro check"
+  },
+  "dependencies": {
+    "astro": "^5.14.1"
+  },
+  "devDependencies": {
+    "@astrojs/check": "^0.9.4",
+    "prettier": "^3.8.1",
+    "prettier-plugin-astro": "^0.14.1",
+    "typescript": "~6.0.2"
+  }
+}

@@ -1,0 +1,9 @@
+dist/
+.astro/
+node_modules/
+.idea/
+.vscode/
+.claude/
+.env
+.env.*
+!.env.example

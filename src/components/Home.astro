@@ -1,0 +1,187 @@
+---
+import snapshot from '../data/snapshot.json';
+
+interface Props {
+  lang: 'pt-BR' | 'en';
+}
+
+const { lang } = Astro.props;
+const pt = lang === 'pt-BR';
+
+const copy = {
+  eyebrow: pt ? 'e-mail auto-hospedado, feito por você' : 'self-hosted email, built by you',
+  subtitle: pt
+    ? 'Postfix, Dovecot e Rspamd por trás de um painel que mostra exatamente o que está acontecendo — DNS validado, warmup acompanhado, spam filtrado e aprendendo. Nada de caixa preta.'
+    : 'Postfix, Dovecot and Rspamd behind a panel that shows exactly what is happening — DNS validated, warmup tracked, spam filtered and learning. No black box.',
+  seePanel: pt ? 'Ver o painel' : 'See the panel',
+  readArch: pt ? 'Ler a arquitetura' : 'Read the architecture',
+  liveLabel: pt ? 'reputação, sem enrolação' : 'reputation, no guesswork',
+  liveTitle: pt ? 'Reputação sendo construída ao vivo' : 'Reputation being built, live',
+  liveDesc: pt
+    ? 'Não é "manda e reza". Cada domínio mostra o status real de DNS e a curva de warmup — o mesmo painel que você usa pra operar, não um dashboard de marketing.'
+    : 'Not "send and pray." Every domain shows real DNS status and the warmup curve — the same panel you use to operate, not a marketing dashboard.',
+  deliveryLabel: pt ? 'ENTREGA — 14 DIAS' : 'DELIVERY — 14 DAYS',
+  featLabel: pt ? 'o que roda por baixo' : 'what runs underneath',
+  featTitle: pt
+    ? 'Infraestrutura real, não um SaaS disfarçado'
+    : 'Real infrastructure, not a disguised SaaS',
+};
+
+const warmup = pt
+  ? `Dia ${snapshot.warmupDay} do plano de warmup · ${snapshot.sentToday} de ${snapshot.dailyCap} enviados hoje.`
+  : `Warmup day ${snapshot.warmupDay} · ${snapshot.sentToday} of ${snapshot.dailyCap} sent today.`;
+
+const features = pt
+  ? [
+      [
+        'DNS validado de verdade',
+        'SPF, DKIM, DMARC e PTR checados ao vivo — o painel avisa antes de um provedor rejeitar sua mensagem, não depois.',
+      ],
+      [
+        'Warmup com curva, não achismo',
+        'Volume-alvo por semana e um limite que é aplicado de verdade — não um aviso que dá pra ignorar.',
+      ],
+      [
+        'Spam que aprende com você',
+        'Rspamd com Bayes treinado pelas suas correções — cada "não é spam" melhora o filtro pra próxima.',
+      ],
+      [
+        'Notificação no instante da entrega',
+        'Sem polling. O evento nasce na entrega via LMTP e chega no painel em tempo real, por WebSocket.',
+      ],
+      [
+        'Regras de pasta, sem sintaxe',
+        'Monta a regra visualmente, o painel escreve o Sieve por trás — você nunca vê uma linha de script.',
+      ],
+      [
+        'Seu VPS, seus dados',
+        'Sem cobrança por volume, sem terceiro lendo suas mensagens. É a sua caixa, no seu servidor.',
+      ],
+    ]
+  : [
+      [
+        'DNS actually validated',
+        'SPF, DKIM, DMARC and PTR checked live — the panel warns before a provider rejects your message, not after.',
+      ],
+      [
+        'Warmup with a curve, not guesswork',
+        'A weekly target volume and a limit that is actually enforced — not a warning you can ignore.',
+      ],
+      [
+        'Spam filtering that learns from you',
+        'Rspamd with Bayes trained by your corrections — every "not spam" improves the filter for next time.',
+      ],
+      [
+        'Notified the instant it lands',
+        'No polling. The event is born at delivery via LMTP and reaches the panel in real time, over WebSocket.',
+      ],
+      [
+        'Folder rules, no syntax',
+        'Build the rule visually, the panel writes the Sieve behind it — you never see a line of script.',
+      ],
+      [
+        'Your VPS, your data',
+        'No per-volume billing, no third party reading your mail. It is your box, on your server.',
+      ],
+    ];
+---
+
+<section class="hero">
+  <div class="eyebrow">{copy.eyebrow}</div>
+
+  <div class="stamp-hero" aria-hidden="true">
+    <div class="s1">STAMPYX</div>
+    <div class="s2">✓</div>
+    <div class="s3">EST. 2026</div>
+  </div>
+
+  {
+    pt ? (
+      <h1>
+        Seu domínio.
+        <br />
+        Seu servidor.{' '}
+        <em>
+          Sua reputação,
+          <br />
+          construída de propósito.
+        </em>
+      </h1>
+    ) : (
+      <h1>
+        Your domain.
+        <br />
+        Your server.{' '}
+        <em>
+          Your reputation,
+          <br />
+          built on purpose.
+        </em>
+      </h1>
+    )
+  }
+
+  <p class="sub">{copy.subtitle}</p>
+
+  <div class="hero-ctas">
+    <a class="btn-primary-lg" href="/ui/">{copy.seePanel}</a>
+    <a class="btn-ghost" href="#how">{copy.readArch}</a>
+  </div>
+
+  <div class="proof">
+    <span>DKIM · SPF · DMARC <b>{pt ? 'validados' : 'validated'}</b></span>
+    <span>bounce rate <b>{snapshot.bounceRate}%</b></span>
+    <span
+      >{pt ? 'notificação em' : 'notifications in'} <b>{pt ? 'tempo real' : 'real time'}</b></span
+    >
+  </div>
+</section>
+
+<section class="band">
+  <div class="section-label">{copy.liveLabel}</div>
+  <h2 class="section-title">{copy.liveTitle}</h2>
+  <p class="section-desc">{copy.liveDesc}</p>
+
+  <div class="live-card">
+    <div>
+      <div style="font-family:var(--mono);font-size:13px;font-weight:600;margin-bottom:10px">
+        {snapshot.domain}
+      </div>
+      {
+        snapshot.checks.map((check: string) => (
+          <span class="status-chip ok">
+            <span class="dot" aria-hidden="true" />
+            {check} ok
+          </span>
+        ))
+      }
+      <p style="margin-top:18px;font-size:12.5px;color:var(--muted);line-height:1.6">{warmup}</p>
+    </div>
+
+    <div>
+      <div style="font-size:11px;font-family:var(--mono);color:var(--muted-2);margin-bottom:10px">
+        {copy.deliveryLabel}
+      </div>
+      <div class="chart" role="img" aria-label={copy.deliveryLabel}>
+        {snapshot.delivery.map((height: number) => <div class="bar" style={`height:${height}%`} />)}
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="band" id="how">
+  <div class="section-label">{copy.featLabel}</div>
+  <h2 class="section-title">{copy.featTitle}</h2>
+
+  <div class="grid3">
+    {
+      features.map(([heading, body], index) => (
+        <article class="feat">
+          <div class="num">{String(index + 1).padStart(2, '0')}</div>
+          <h3>{heading}</h3>
+          <p>{body}</p>
+        </article>
+      ))
+    }
+  </div>
+</section>

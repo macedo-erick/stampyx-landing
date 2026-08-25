@@ -1,0 +1,9 @@
+{
+  "domain": "stampyx.com",
+  "checks": ["SPF", "DKIM", "DMARC", "PTR"],
+  "warmupDay": 18,
+  "dailyCap": 100,
+  "sentToday": 62,
+  "bounceRate": 0.4,
+  "delivery": [22, 30, 34, 41, 38, 47, 55, 60, 63, 70, 78, 80, 79, 84]
+}
