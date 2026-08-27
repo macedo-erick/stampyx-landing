@@ -430,16 +430,99 @@ footer {
   color: var(--text);
 }
 
+/* Phone. Two things were wrong here rather than one: the nav asked for more width than the
+   bar has, and the hero's type was sized for a 1080px measure. */
 @media (max-width: 720px) {
-  h1 {
-    font-size: 32px;
+  .wrap {
+    padding: 0 20px;
   }
+
+  /* Brand plus four controls wanted ~430px of a 350px bar, so the CTA ran off the right
+     edge and the nav link wrapped into the brand. They get a row each instead. */
+  nav {
+    flex-direction: column;
+    gap: 14px;
+    padding: 18px 0;
+  }
+
+  .nav-right {
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 14px;
+  }
+
+  .nav-link {
+    white-space: nowrap;
+  }
+
+  .hero {
+    padding: 48px 0 44px;
+  }
+
+  .eyebrow {
+    letter-spacing: 1.4px;
+    margin-bottom: 22px;
+  }
+
+  .stamp-hero {
+    width: 124px;
+    height: 124px;
+    margin-bottom: 28px;
+  }
+
+  /* The <br>s are placed for a 680px measure. Down here the line box wraps anyway, so they
+     only added breaks on top of breaks - which is what made centred copy read as a ragged
+     left-hung column. Dropping them and balancing the wrap fixes the shape. */
+  h1 {
+    font-size: 30px;
+    letter-spacing: -0.2px;
+    text-wrap: balance;
+  }
+
+  h1 br {
+    display: none;
+  }
+
+  .sub {
+    font-size: 15px;
+    margin-bottom: 28px;
+    text-wrap: pretty;
+  }
+
+  /* Two thumb-sized targets sharing the row rather than two small ones floating mid-page. */
+  .hero-ctas a {
+    flex: 1 1 auto;
+    text-align: center;
+  }
+
+  .proof {
+    gap: 8px 18px;
+    font-size: 11px;
+  }
+
+  section.band {
+    padding: 44px 0;
+  }
+
+  .section-title {
+    font-size: 22px;
+  }
+
   .live-card,
   .grid3 {
     grid-template-columns: 1fr;
   }
-  .proof {
-    gap: 18px;
+
+  .live-card {
+    padding: 20px;
+  }
+
+  .feat {
+    padding: 22px 20px;
+  }
+
+  footer {
+    padding: 32px 0 44px;
   }
 }
 
