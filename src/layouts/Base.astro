@@ -31,7 +31,6 @@ const isPt = lang === 'pt-BR';
     />
 
     <script is:inline>
-      // Runs before first paint so the chosen theme does not flash.
       (function () {
         try {
           var stored = localStorage.getItem('stampyx-theme');
@@ -40,7 +39,7 @@ const isPt = lang === 'pt-BR';
             : window.matchMedia('(prefers-color-scheme: dark)').matches;
           document.documentElement.setAttribute('data-theme', dark ? 'dark' : 'light');
         } catch (e) {
-          /* private mode: keep the markup default */
+          return;
         }
       })();
     </script>
@@ -112,7 +111,7 @@ const isPt = lang === 'pt-BR';
           try {
             localStorage.setItem('stampyx-theme', next);
           } catch (e) {
-            /* nothing to persist to */
+            return;
           }
         });
       })();
